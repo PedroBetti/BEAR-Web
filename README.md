@@ -5,5 +5,6 @@ If you want to donwload this and run it yourself you have to install Node and NP
 
 This Web app is hosted on HEROKU at https://bear-ai.herokuapp.com
 
-Note: the Web app version has a different system being used as the chatbot function, since the more complex tensorflow model could not be hoested on the web currently. If you want to try out the tensorflow model or read more about it is at https://github.com/PedroBetti/BEAR-API.git .
+Note: the Web app version has a different system being used as the chatbot function, since the more complex tensorflow model could not be hoested on the web currently. If you want to try out the tensorflow model or read more about it is at https://github.com/PedroBetti/BEAR-API.git . The model used in the app is from Scketchfab.
+
 
