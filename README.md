@@ -1,3 +1,4 @@
+#BEAR Web App
 this is the web based aplication, and all its required files.
 
 If you want to donwload this and run it yourself you have to install Node and NPM, then you can use NPM start to run on local server.
