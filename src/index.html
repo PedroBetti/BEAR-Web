@@ -1,0 +1,321 @@
+<head>
+    <title>B.E.A.R AI</title>
+    <link href="mystyle.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  </head>
+  
+  <body>
+    <!-- Import Libraries -->
+    <script src="js/three.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/loaders/GLTFLoader.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/baffle@0.3.6/dist/baffle.min.js"></script>
+  </body>
+  </body>
+  <section id="logo" class="sectionMain"><ul class="logo"></ul>
+  <ul class="logo1" id="logo1"><p>BEAR</p></ul>
+  <div class="mainDiv">
+  <canvas class="webgl">
+      <script type="module">
+        import {GLTFLoader} from "./GLTFLoader.js";
+        
+        const canvas = document.querySelector('canvas.webgl');
+  
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
+        var renderer = new THREE.WebGLRenderer({alpha: true});
+        renderer.setSize(canvas.innerWidth, canvas.innerHeight);
+        document.body.appendChild(renderer.domElement);
+  
+  
+  
+        var loader = new THREE.GLTFLoader();
+        loader.load('untitled.gltf', function(gltf){
+            scene.add(gltf.scene);
+            
+        });
+  
+        var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.1);
+        scene.add(light);
+        //limits -10 ==> 10, rotaion y and postion x opp
+        camera.position.x = 0;
+        camera.position.y = 0.15;
+        camera.position.z = 0.3;
+  
+        const sizes = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+  
+        window.addEventListener('resize', () =>
+        {
+            // Update sizes
+            sizes.width = window.innerWidth;
+            sizes.height = window.innerHeight;
+  
+            // Update camera
+            camera.aspect = sizes.width / sizes.height;
+            camera.updateProjectionMatrix();
+  
+            // Update renderer
+            renderer.setSize(sizes.width, sizes.height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+  
+        
+        renderer.setSize(sizes.width, sizes.height)
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  
+        document.addEventListener('mousemove', onDocumentMouseMove);
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+  
+        const windowX = window.innerWidth / 2;
+        const windowY = window.innerHeight / 2;
+  
+        function onDocumentMouseMove(event){
+            mouseX = (event.clientX - windowX)
+            mouseY = (event.clientY - windowY)
+        }
+  
+        function animate(){
+           requestAnimationFrame(animate);
+           renderer.render(scene, camera);
+  
+           camera.rotation.y = 0/180*Math.PI;
+           camera.rotation.y += 0.0002* mouseY;
+           camera.rotation.x = 0/180*Math.PI;
+           camera.rotation.y += 0.0002* mouseX;
+           camera.position.y += 0.0002 / windowY;
+  
+  
+        };
+        animate();
+    </script>
+    </canvas>
+    <div class="right"><div class="inputField" data-tilt data-tilt-scale="1.2" data-tilt-glare data-tilt-max-glare="0.7">
+      <div class="top">
+        <p >YOU:</p>
+      <input class="input" />
+      <button class="button">SEND</button>
+      <p class="bearResp">BEAR:</p>
+      </div>
+      <div class="bottom">
+        <div class="response">
+          <p class="update"></p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <script src="vanilla-tilt.min.js"></script>
+    </div>
+
+    
+
+  <script>
+    let userInputString = "";
+
+    //HANDLE INPUT
+    const input = document.querySelector("input");
+    input.addEventListener("input", updateValue);
+    function updateValue(e) {
+      userInputString = e.target.value;
+    }
+    //HANDLE BUTTON
+    const btn = document.querySelector("button");
+    const resultField = document.querySelector(".update");
+    btn.addEventListener("click", () => {
+      console.log(getResponseFromMessage(userInputString));
+    });
+
+    //MAIN FUNCTION FOR CLASSIFING INPUT
+    //ALL THREE ML5 MODELS ARE CALLED HERE
+    function getResponseFromMessage(userInputString) {
+      const questionCategories = [
+        {
+          categoryName: "unknown",
+          triggerWords: [],
+          responses: ["I dont have an answer for that", "I dont understand", "I only know about math, the solar system, and norse mythology"]
+        },
+        {
+          categoryName: "greetings",
+          triggerWords: ["hello", "hi", "hey", "hows it going", "whats up"],
+          responses: ["hello", "hey", "how can I help"]
+        },
+        {
+          categoryName: "goodbye",
+          triggerWords: ["cya", "see you later", "ltr", "bye", "goodbye", "see ya", "ciao"],
+          responses: ["ltr", "bye", "talk to you later"]
+        },
+        {
+          categoryName: "topics",
+          triggerWords: ["what do you know", "what can you help me with", "topics", "what can you help with", "what can you teach me"],
+          responses: ["I know about basic math, the solar system, and norse mythology", "here is what I can teach you about, math, the solar system, and norse mythology", "I can help with these topics math, the solar system, and norse mythology "]
+        },
+        {
+          categoryName: "identity",
+          triggerWords: ["who are you", "what are you", "what do you do", "who", "are", "you"],
+          responses: ["I am BEAR an AI personal Tutor", "I am your personal tutor BEAR"]
+        },
+        {
+          categoryName: "math",
+          triggerWords: ["tell me more about math", "teach me about math", "what do you know about math", "math"],
+          responses: ["I can teach you about addition, subtraction, division and multiplication", "I can help explain addition, subtraction, division and multiplication "]
+        },
+        {
+          categoryName: "addtion",
+          triggerWords: ["tell me more about addiction", "explain addition", "how do I add", "addtion"],
+          responses: ["The addition is taking two or more numbers and adding them together, that is, it is the total sum of 2 or more numbers."]
+        },
+        {
+          categoryName: "subtraction",
+          triggerWords: ["tell me more about subtraction", "explain subtraction", "how do I substract", "subtraction"],
+          responses: ["In math, to subtract means to take away from a group or a number of things. When we subtract, the number of things in the group reduce or become less."]
+        },
+        {
+          categoryName: "division",
+          triggerWords: ["tell me more about division", "explain division", "how do I divide", "division"],
+          responses: ["The division is a method of distributing a group of things into equal parts. It is one of the four basic operations of arithmetic, which gives a fair result of sharing. The division is an operation inverse of multiplication. If 3 groups of 4 make 12 in multiplication; 12 divided into 3 equal groups give 4 in each group in division."]
+        },
+        {
+          categoryName: "multiplication",
+          triggerWords: ["tell me more about multiplication", "explain multiplication", "how do I multiply", "multiplication"],
+          responses: ["Multiplication, one of the four basic operations of arithmetic, gives the result of combining groups of equal sizes. Here each group has 3 ice creams, and there are two such groups. So, there are 2 times 3 or 3 + 3 or 6 ice creams in total. In other words, multiplication is repeated addition."]
+        },
+        {
+          categoryName: "solar system",
+          triggerWords: ["tell me about the solar system", "explain the solar system", "what planets are in our solar system", "solar system"],
+          responses: ["the solar system is contains 8 planets and one star. listed in order they are, The sun, Mercury, Venus, Earth, Mars, jupyter, Saturn, Uranus, and Neptune. which planet would you like to learn more about ?"]
+        },
+        {
+          categoryName: "Sun",
+          triggerWords: ["tell me about the sun", "the sun", "teach me about the sun", "about the sun"],
+          responses: ["The Sun is the Solar System's star and by far its most massive component. Its large mass (332,900 Earth masses), which comprises 99.86% of all the mass in the Solar System, produces temperatures and densities in its core high enough to sustain nuclear fusion of hydrogen into helium, making it a main-sequence star.[59] This releases an enormous amount of energy, mostly radiated into space as electromagnetic radiation peaking in visible light. The Sun is a G2-type main-sequence star. Hotter main-sequence stars are more luminous. The Sun's temperature is intermediate between that of the hottest stars and that of the coolest stars. Stars brighter and hotter than the Sun are rare, whereas substantially dimmer and cooler stars, known as red dwarfs, make up 85% of the stars in the Milky Way. The Sun is a population I star; it has a higher abundance of elements heavier than hydrogen and helium (metals in astronomical parlance) than the older population II stars. Elements heavier than hydrogen and helium were formed in the cores of ancient and exploding stars, so the first generation of stars had to die before the universe could be enriched with these atoms. The oldest stars contain few metals, whereas stars born later have more. This high metallicity is thought to have been crucial to the Sun's development of a planetary system because the planets form from the accretion of metals."]
+        },
+        {
+          categoryName: "Mercury",
+          triggerWords: ["tell me about Mercury", "Mercury", "teach me about Mercury", "about mercury"],
+          responses: ["Mercury (0.4 AU from the Sun) is the closest planet to the Sun and on average, all seven other planets. The smallest planet in the Solar System (0.055 M⊕), Mercury has no natural satellites. Besides impact craters, its only known geological features are lobed ridges or rupes that were probably produced by a period of contraction early in its history.[80] Mercury's very tenuous atmosphere consists of atoms blasted off its surface by the solar wind. Its relatively large iron core and thin mantle have not yet been adequately explained. Hypotheses include that its outer layers were stripped off by a giant impact, or that it was prevented from fully accreting by the young Sun's energy."]
+        },
+        {
+          categoryName: "Venus",
+          triggerWords: ["tell me about Venus", "Venus", "teach me about Venus","about venus" ],
+          responses: ["Venus (0.7 AU from the Sun) is close in size to Earth (0.815 M⊕) and, like Earth, has a thick silicate mantle around an iron core, a substantial atmosphere, and evidence of internal geological activity. It is much drier than Earth, and its atmosphere is ninety times as dense. Venus has no natural satellites. It is the hottest planet, with surface temperatures over 400 °C (752 °F), most likely due to the amount of greenhouse gases in the atmosphere. No definitive evidence of current geological activity has been detected on Venus, but it has no magnetic field that would prevent depletion of its substantial atmosphere, which suggests that its atmosphere is being replenished by volcanic eruptions."]
+        },
+        {
+          categoryName: "Mars",
+          triggerWords: ["tell me about Mars", "Mars", "teach me about Mars", "about mars"],
+          responses: ["Mars (1.5 AU from the Sun) is smaller than Earth and Venus (0.107 M⊕). It has an atmosphere of mostly carbon dioxide with a surface pressure of 6.1 millibars (roughly 0.6% of that of Earth). Its surface, peppered with vast volcanoes, such as Olympus Mons, and rift valleys, such as Valles Marineris, shows geological activity that may have persisted until as recently as 2 million years ago.[89] Its red colour comes from iron oxide (rust) in its soil. Mars has two tiny natural satellites (Deimos and Phobos) thought to be either captured asteroids, or ejected debris from a massive impact early in Mars's history."]
+        },
+        {
+          categoryName: "Earth",
+          triggerWords: ["tell me about Earth", "Earth", "teach me about Earth", "about earth"],
+          responses: ["Earth (1 AU from the Sun) is the largest and densest of the inner planets, the only one known to have current geological activity, and the only place where life is known to exist. Its liquid hydrosphere is unique among the terrestrial planets, and it is the only planet where plate tectonics has been observed. Earth's atmosphere is radically different from those of the other planets, having been altered by the presence of life to contain 21% free oxygen. It has one natural satellite, the Moon, the only large satellite of a terrestrial planet in the Solar System."]
+        },
+        {
+          categoryName: "Jupyter",
+          triggerWords: ["tell me about Jupyter", "jupyter", "teach me about jupyter", "about jupyter"],
+          responses: ["Jupiter (5.2 AU), at 318 M⊕, is 2.5 times the mass of all the other planets put together. It is composed largely of hydrogen and helium. Jupiter's strong internal heat creates semi-permanent features in its atmosphere, such as cloud bands and the Great Red Spot. Jupiter has 79 known satellites. The four largest, Ganymede, Callisto, Io, and Europa, show similarities to the terrestrial planets, such as volcanism and internal heating. Ganymede, the largest satellite in the Solar System, is larger than Mercury."]
+        },
+        {
+          categoryName: "Saturn",
+          triggerWords: ["tell me about Saturn", "Saturn", "teach me about Saturn", "about saturn"],
+          responses: ["Saturn (9.5 AU), distinguished by its extensive ring system, has several similarities to Jupiter, such as its atmospheric composition and magnetosphere. Although Saturn has 60% of Jupiter's volume, it is less than a third as massive, at 95 M⊕. Saturn is the only planet of the Solar System that is less dense than water. The rings of Saturn are made up of small ice and rock particles. Saturn has 82 confirmed satellites composed largely of ice. Two of these, Titan and Enceladus, show signs of geological activity.[106] Titan, the second-largest moon in the Solar System, is larger than Mercury and the only satellite in the Solar System with a substantial atmosphere."]
+        },
+        {
+          categoryName: "Uranus",
+          triggerWords: ["tell me about Uranus", "Uranus", "teach me about Uranus", "about uranus"],
+          responses: ["Uranus (19.2 AU), at 14 M⊕, is the lightest of the outer planets. Uniquely among the planets, it orbits the Sun on its side; its axial tilt is over ninety degrees to the ecliptic. It has a much colder core than the other giant planets and radiates very little heat into space. Uranus has 27 known satellites, the largest ones being Titania, Oberon, Umbriel, Ariel, and Miranda."]
+        },
+        {
+          categoryName: "Neptune",
+          triggerWords: ["tell me about Neptune", "Neptune", "teach me about Neptune", "about neptune"],
+          responses: ["Neptune (30.1 AU), though slightly smaller than Uranus, is more massive (17 M⊕) and hence more dense. It radiates more internal heat, but not as much as Jupiter or Saturn. Neptune has 14 known satellites. The largest, Triton, is geologically active, with geysers of liquid nitrogen. Triton is the only large satellite with a retrograde orbit. Neptune is accompanied in its orbit by several minor planets, termed Neptune trojans, that are in 1:1 resonance with it."]
+        },
+        {
+          categoryName: "norse mythology",
+          triggerWords: ["what do you know about norse mythology", "teach me about norse mythology", "tell me more about the norse gods","norse mythology"],
+          responses: ["I know about Loki, Odin, Jormungandr, thor, freyja, and Balder", "I can teach you about Loki, Odin, Jormungandr, thor, freyja, and Balder"]
+        },
+        {
+          categoryName: "Loki",
+          triggerWords: ["tell me about loki", "loki", "teach me about loki", "about loki", "who is Loki"],
+          responses: ["The sly, trickster of the Norse gods. Son of two giants. Also known as the Sly One, the Trickster, the Shape Changer and the Sky Traveller. Becomes increasingly more evil. He is responsible for the death of Balder. Bound until Ragnarok"]
+        },
+        {
+          categoryName: "Odin",
+          triggerWords: ["tell me about odin", "odin", "teach me about odin", "about odin", "who is Odin"],
+          responses: ["King of the Norse Gods, God of poetry, battle and death. Chief god of the Aesir. Also known as the all-father, the terrible one, one-eyed and father of battle"]
+        },
+        {
+          categoryName: "thor",
+          triggerWords: ["tell me about thor", "thor", "teach me about thor","about thor", "who is thor" ],
+          responses: ["God of Sky, thunder and fertility. Associated with law and order in Asgard and guardian of the Norse gods. Son of Odin and Earth and husband of Sif. Also known as the thunder god and charioteer"]
+        },
+        {
+          categoryName: "freyja",
+          triggerWords: ["tell me about freyja", "freyja", "teach me about freyja", "about freyja", "who is freyja"], 
+          responses: [" Main goddess of the Vanir (fertility gods). Daughter of Njord and sister of Freyr."]
+        },
+        {
+          categoryName: "Balder",
+          triggerWords: ["tell me about balder", "balder", "teach me about balder", "about balder", "who is balder"],
+          responses: ["Son of Odin and Frigg. Known as a gentle and wise god. Killed accidentally by his brother Hod. Will return after Ragnarok."]
+        },
+        {
+          categoryName: "Jormungandr",
+          triggerWords: ["tell me about Jormungandr", "Jormungandr", "teach me about Jormungandr", "about jormungandr", "who is jormungandr"],
+          responses: ["The world serpent"]
+        }
+      ];
+
+      //CLEAN THE INPUT STRING (ex. it hAs cHeEse -> ithascheese)
+      userInputString = userInputString.toLowerCase();
+
+      //THIS VARIABLE WILL HOLD THE CATEGORY NAME IN THE FUTURE, IF WE FIND NO TRIGGER WORDS IT WILL REMAIN UNKNOWN
+      var bestScoreCategory = {
+        categoryName: "Unknown",
+        score: 0,
+        index: 0
+      };
+
+      //LOOP THROUGH ALL THE QUESTION CATEGORIES
+      for (var i = 0; i < questionCategories.length; i++) {
+        var categoryScore = 0;
+        //CHECK IF THE USER'S MESSAGE HAS ANY OF THE TRIGGER WORDS IN THIS CATEGORY
+        for (var j = 0; j < questionCategories[i].triggerWords.length; j++) {
+          const triggerWord = questionCategories[i].triggerWords[j].toLowerCase();
+          if (userInputString.includes(triggerWord)) {
+            categoryScore++;
+            console.log("Found word " + triggerWord);
+          }
+        }
+        //AFTER CHECKING EVERY RELATED OF THIS EMOJI, IF WE HAVE A HIGHER SCORE THAN THE PREVIOUS BEST MAKE THIS WORD THE NEW BEST
+        if (categoryScore > bestScoreCategory.score) {
+          bestScoreCategory.categoryName = questionCategories[i].categoryName;
+          bestScoreCategory.score = categoryScore;
+          bestScoreCategory.index = i;
+        }
+      }
+
+      //NOW THAT WE KNOW WHICH CATEGORY THE QUESTION BELONGS TO, PICK A RANDOM RESPONSE
+      const possibleResponses =
+        questionCategories[bestScoreCategory.index].responses;
+      const chosenResponseIndex = Math.floor(
+        Math.random() * possibleResponses.length
+      );
+      resultField.textContent = possibleResponses[chosenResponseIndex];
+      return possibleResponses[chosenResponseIndex];
+    }
+  </script>
+</section>
+
+  
+  </html>

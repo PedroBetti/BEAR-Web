@@ -1,0 +1,139 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body { 
+  background-image: linear-gradient(180deg, #190533, #000000);
+  font-family: 'Bebas Neue', sans-serif;
+}
+.logo{
+  top:35%;
+  left:25%;
+  letter-spacing: 5px;
+  font-size: 6rem;
+}
+
+.logo1{
+  position: fixed;
+  top:0px;
+  left:1%;
+  letter-spacing: 5px;
+  font-size: 40px;
+  
+}
+
+.logo1 p{
+  color: rgb(255, 255, 255);
+  padding: 10px;
+}
+
+.sectionMain{
+  outline: 1px white;
+}
+
+.mainDiv{
+  outline: 1px white;
+  
+}
+
+.left{
+  width: 50%;
+  height: 100%;
+  right: 0%;
+  display:inline-block;
+}
+
+.right{
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  top: 0%;
+  right: 0%;
+  display:inline-block;
+}
+
+.webgl{
+  background-color: rgba(7, 20, 90, 0);
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 100px;
+  
+}
+
+.canvasConvo{
+  background-color:tomato;
+  height: 100vh;
+  width: 100%;
+}
+
+p{
+  color: rgb(0, 0, 0);
+}
+
+.inputField{
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  right:20%;
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.952);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.9);
+  perspective: 1000px;
+}
+
+.input{
+  margin-left: 10px;
+}
+
+.button{
+  margin-right: 10px;
+}
+.bearResp{
+  margin-top: 15px;
+  transform: translateZ(30px);
+}
+.top p{
+  margin-top: 15px;
+  margin-left: 15px;
+  font-size: 25px;
+  transform: translateZ(30px);
+}
+
+.response .update p{
+  font-size: 10px;
+  transform: translateZ(30px);
+}
+.update{
+  margin-left: 10px;
+  margin-bottom: 15px;
+  margin-right: 10px;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 300px;
+  grid-template-rows: 210px 210px 20px;
+  grid-template-areas: "image" "text" "stats";
+  
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.952);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.9);
+  position: absolute;
+
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  
+  top:225%;
+left:12.5%;
+  
+  
+}
+
+
+.js-tilt-glare{
+  border-radius: 15px;
+}
+
