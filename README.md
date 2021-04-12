@@ -1,32 +1,8 @@
-<h1 align="center">three.js starter</h1>
+this is the web based aplication, and all its required files.
 
-<p align="center"><img width="800" alt="three-js starter" src="https://github.com/guymargalit/threejs-starter/blob/master/src/images/threejs.png"></p>
+If you want to donwload this and run it yourself you have to install Node and NPM, then you can use NPM start to run on local server.
 
-<p align="center"><b>A lightweight three.js starter boilerplate for building 3D JavaScript applications.</b></p>
+This Web app is hosted on HEROKU at https://bear-ai.herokuapp.com
 
-A starter three.js web application configured with an Express server. The packages and libraries included are as follows:
+Note: the Web app version has a different system being used as the chatbot function, since the more complex tensorflow model could not be hoested on the web currently. If you want to try out the tensorflow model or read more about it is at https://github.com/PedroBetti/BEAR-API.git .
 
--   three.js
--   Detector.js
--   OrbitControls.js
--   stats.min.js
--   GLTFLoader.js
--   express
-
-The template also includes a sample textured spaceship model in the models folder. For instructions on how to load your own 3D models, see here: **[Loading-3D-models](https://threejs.org/docs/#manual/introduction/Loading-3D-models)**
-
-## Get Started
-
-```sh
-git clone https://github.com/guymargalit/threejs-starter.git  # Clone the repository.
-
-cd threejs-starter && yarn install  # Install dependencies.
-
-yarn start  # Start the local development server.
-```
-
-Then open in your browser **[http://localhost:5000](http://localhost:5000)**.
-
-If everything worked correctly, you should see the following:
-
-![three.js application](https://github.com/guymargalit/threejs-starter/blob/master/src/images/sample.png)
